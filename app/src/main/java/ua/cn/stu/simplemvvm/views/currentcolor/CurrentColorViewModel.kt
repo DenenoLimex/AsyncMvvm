@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.PendingResult
 import ua.cn.stu.foundation.model.SuccessResult
 import ua.cn.stu.foundation.model.takeSuccess
@@ -58,5 +59,13 @@ class CurrentColorViewModel(
         val currentColor = currentColor.value.takeSuccess() ?: return
         val screen = ChangeColorFragment.Screen(currentColor.id)
         navigator.launch(screen)
+    }
+
+    fun tryAgain() {
+        viewModelScope.launch {
+            _currentColor.postValue(PendingResult())
+            delay(2000)
+            colorsRepository.addListener(colorListener)
+        }
     }
 }

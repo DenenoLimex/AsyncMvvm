@@ -2,6 +2,7 @@ package ua.cn.stu.simplemvvm.views
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.view.children
 import ua.cn.stu.foundation.model.Result
 import ua.cn.stu.foundation.views.BaseFragment
@@ -30,4 +31,8 @@ fun <T> BaseFragment.renderSimpleResult(
             binding.resultProgressBar.visibility = View.VISIBLE
         }
     )
+}
+
+fun BaseFragment.onTryAgain(root: View, onTryAgainPressed: () -> Unit) {
+     root.findViewById<Button>(R.id.tryAgainButton).setOnClickListener { onTryAgainPressed() }
 }

@@ -9,6 +9,7 @@ import ua.cn.stu.foundation.views.BaseScreen
 import ua.cn.stu.foundation.views.screenViewModel
 import ua.cn.stu.simplemvvm.databinding.FragmentCurrentColorBinding
 import ua.cn.stu.simplemvvm.databinding.PartResultBinding
+import ua.cn.stu.simplemvvm.views.onTryAgain
 import ua.cn.stu.simplemvvm.views.renderSimpleResult
 
 class CurrentColorFragment : BaseFragment() {
@@ -35,6 +36,10 @@ class CurrentColorFragment : BaseFragment() {
 
         binding.changeColorButton.setOnClickListener {
             viewModel.changeColor()
+        }
+
+        onTryAgain(binding.root) {
+            viewModel.tryAgain()
         }
 
         return binding.root
