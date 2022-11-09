@@ -22,7 +22,7 @@ class InMemoryColorsRepository(
         Thread.sleep(2000)
         if (currentColor != namedColor) {
             currentColor = namedColor
-            listeners.forEach { it(currentColor) }
+            listeners.forEach { it(namedColor) }
         }
     }
 

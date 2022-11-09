@@ -31,7 +31,7 @@ class SimpleTasksFactory : TasksFactory {
                 } catch (e: Exception) {
                     publishResult(listener, ErrorResult(e))
                 }
-            }
+            }.apply { start() }
         }
 
         override fun cancel() {
