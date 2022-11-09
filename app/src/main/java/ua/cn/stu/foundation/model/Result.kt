@@ -3,6 +3,8 @@ package ua.cn.stu.foundation.model
 
 typealias Mapper<Input, Output> = (Input) -> Output
 
+sealed class FinalResult<T>: Result<T>()
+
 sealed class Result<T> {
     fun <R> map(mapper: Mapper<T, R>? = null): Result<R> = when (this) {
         is PendingResult -> PendingResult()
@@ -16,9 +18,9 @@ sealed class Result<T> {
 
 class PendingResult<T> : Result<T>()
 
-class SuccessResult<T>(val data: T) : Result<T>()
+class SuccessResult<T>(val data: T) : FinalResult<T>()
 
-class ErrorResult<T>(val exception: Exception) : Result<T>()
+class ErrorResult<T>(val exception: Exception) : FinalResult<T>()
 
 fun <T> Result<T>?.takeSuccess(): T? {
     return if (this is SuccessResult) {

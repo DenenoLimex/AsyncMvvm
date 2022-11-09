@@ -1,23 +1,40 @@
 package ua.cn.stu.simplemvvm.model.colors
 
 import android.graphics.Color
+import ua.cn.stu.foundation.tasks.Task
+import ua.cn.stu.foundation.tasks.TasksFactory
 
 /**
  * Simple in-memory implementation of [ColorsRepository]
  */
-class InMemoryColorsRepository : ColorsRepository {
-
-    override var currentColor: NamedColor = AVAILABLE_COLORS[0]
-        set(value) {
-            if (field != value) {
-                field = value
-                listeners.forEach { it(value) }
-            }
-        }
-
+class InMemoryColorsRepository(
+    private val tasksFactory: TasksFactory
+) : ColorsRepository {
+    private var currentColor = AVAILABLE_COLORS[0]
     private val listeners = mutableSetOf<ColorListener>()
 
-    override fun getAvailableColors(): List<NamedColor> = AVAILABLE_COLORS
+    override fun getCurrentColor(): Task<NamedColor> = tasksFactory.async {
+        Thread.sleep(2000)
+        return@async currentColor
+    }
+
+    override fun setCurrentColor(namedColor: NamedColor): Task<Unit> = tasksFactory.async {
+        Thread.sleep(2000)
+        if (currentColor != namedColor) {
+            currentColor = namedColor
+            listeners.forEach { it(currentColor) }
+        }
+    }
+
+    override fun getAvailableColors(): Task<List<NamedColor>> = tasksFactory.async {
+        Thread.sleep(2000)
+        return@async AVAILABLE_COLORS
+    }
+
+    override fun getById(id: Long): Task<NamedColor> = tasksFactory.async {
+        Thread.sleep(2000)
+        return@async AVAILABLE_COLORS.first { it.id == id }
+    }
 
     override fun addListener(listener: ColorListener) {
         listeners += listener
@@ -26,10 +43,6 @@ class InMemoryColorsRepository : ColorsRepository {
 
     override fun removeListener(listener: ColorListener) {
         listeners -= listener
-    }
-
-    override fun getById(id: Long): NamedColor {
-        return AVAILABLE_COLORS.first { it.id == id }
     }
 
     companion object {

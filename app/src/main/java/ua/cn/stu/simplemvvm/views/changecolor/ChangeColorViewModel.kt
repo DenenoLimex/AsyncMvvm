@@ -1,11 +1,15 @@
 package ua.cn.stu.simplemvvm.views.changecolor
 
-import androidx.lifecycle.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.Transformations
+import ua.cn.stu.foundation.model.ErrorResult
+import ua.cn.stu.foundation.model.FinalResult
 import ua.cn.stu.foundation.model.PendingResult
 import ua.cn.stu.foundation.model.SuccessResult
 import ua.cn.stu.foundation.navigator.Navigator
+import ua.cn.stu.foundation.tasks.TasksFactory
 import ua.cn.stu.foundation.uiactions.UiActions
 import ua.cn.stu.foundation.views.BaseViewModel
 import ua.cn.stu.foundation.views.LiveResult
@@ -21,6 +25,7 @@ class ChangeColorViewModel(
     private val navigator: Navigator,
     private val uiActions: UiActions,
     private val colorsRepository: ColorsRepository,
+    private val tasksFactory: TasksFactory,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel(), ColorsAdapter.Listener {
 
@@ -45,14 +50,15 @@ class ChangeColorViewModel(
     }
 
     init {
-        viewModelScope.launch {
-            delay(2000)
-            _availableColors.value = SuccessResult(colorsRepository.getAvailableColors())
-        }
+        load()
         // initializing MediatorLiveData
         _viewState.addSource(_availableColors) { mergeSources() }
         _viewState.addSource(_currentColorId) { mergeSources() }
         _viewState.addSource(_saveInProgress) { mergeSources() }
+    }
+
+    private fun load() {
+        colorsRepository.getAvailableColors().into(_availableColors)
     }
 
     override fun onColorChosen(namedColor: NamedColor) {
@@ -60,23 +66,14 @@ class ChangeColorViewModel(
         _currentColorId.value = namedColor.id
     }
 
-    private var mockError = true
-
     fun onSavePressed() {
-        viewModelScope.launch {
-            if (mockError) {
-                _saveInProgress.postValue(false)
-                uiActions.toast(uiActions.getString(R.string.error_happened))
-                mockError = false
-            } else {
-                _saveInProgress.postValue(true)
-                delay(2000)
-                val currentColorId = _currentColorId.value ?: return@launch
-                val currentColor = colorsRepository.getById(currentColorId)
-                colorsRepository.currentColor = currentColor
-                navigator.goBack(result = currentColor)
-            }
-        }
+        _saveInProgress.postValue(true)
+        tasksFactory.async {
+            val currentColorId = _currentColorId.value ?: throw IllegalStateException("Color id should not be null")
+            val currentColor = colorsRepository.getById(currentColorId).await()
+            colorsRepository.setCurrentColor(currentColor).await()
+            return@async currentColor
+        }.safeEnqueue(::onSaved)
     }
 
     fun onCancelPressed() {
@@ -98,11 +95,7 @@ class ChangeColorViewModel(
     }
 
     fun tryAgain() {
-        viewModelScope.launch {
-            _availableColors.postValue(PendingResult())
-            delay(2000)
-            _availableColors.value = SuccessResult(colorsRepository.getAvailableColors())
-        }
+        load()
     }
 
     data class ViewState(
@@ -111,4 +104,12 @@ class ChangeColorViewModel(
         val showCancelButton: Boolean,
         val showSaveProgressBar: Boolean
     )
+
+    private fun onSaved(result: FinalResult<NamedColor>) {
+        _saveInProgress.value = false
+        when (result) {
+            is SuccessResult -> navigator.goBack(result.data)
+            is ErrorResult -> uiActions.toast(uiActions.getString(R.string.error_happened))
+        }
+    }
 }
