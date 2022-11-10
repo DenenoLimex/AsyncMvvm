@@ -1,10 +1,11 @@
-package ua.cn.stu.foundation.tasks
+package ua.cn.stu.foundation.model.tasks
 
 import android.os.Handler
 import android.os.Looper
 import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.FinalResult
 import ua.cn.stu.foundation.model.SuccessResult
+import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
 
 private val handler = Handler(Looper.getMainLooper())
 
@@ -23,7 +24,7 @@ class SimpleTasksFactory : TasksFactory {
 
         override fun await(): T = body()
 
-        override fun enqueue(listener: TaskListener<T>) {
+        override fun enqueue(dispatcher: Dispatcher, listener: TaskListener<T>) {
             thread = Thread {
                 try {
                     val data = body()

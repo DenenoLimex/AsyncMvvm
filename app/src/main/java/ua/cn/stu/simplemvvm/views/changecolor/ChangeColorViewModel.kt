@@ -9,7 +9,8 @@ import ua.cn.stu.foundation.model.FinalResult
 import ua.cn.stu.foundation.model.PendingResult
 import ua.cn.stu.foundation.model.SuccessResult
 import ua.cn.stu.foundation.navigator.Navigator
-import ua.cn.stu.foundation.tasks.TasksFactory
+import ua.cn.stu.foundation.model.tasks.TasksFactory
+import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
 import ua.cn.stu.foundation.uiactions.UiActions
 import ua.cn.stu.foundation.views.BaseViewModel
 import ua.cn.stu.foundation.views.LiveResult
@@ -26,8 +27,9 @@ class ChangeColorViewModel(
     private val uiActions: UiActions,
     private val colorsRepository: ColorsRepository,
     private val tasksFactory: TasksFactory,
-    savedStateHandle: SavedStateHandle
-) : BaseViewModel(), ColorsAdapter.Listener {
+    savedStateHandle: SavedStateHandle,
+    dispatcher: Dispatcher
+) : BaseViewModel(dispatcher), ColorsAdapter.Listener {
 
     // input sources
     private val _availableColors = MutableLiveResult<List<NamedColor>>(PendingResult())

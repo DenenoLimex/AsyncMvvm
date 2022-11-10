@@ -1,4 +1,4 @@
-package ua.cn.stu.foundation.dispatchers
+package ua.cn.stu.foundation.model.tasks.dispatchers
 
 import android.os.Handler
 import android.os.Looper

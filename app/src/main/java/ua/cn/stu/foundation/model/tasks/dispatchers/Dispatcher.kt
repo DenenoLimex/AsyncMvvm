@@ -1,4 +1,4 @@
-package ua.cn.stu.foundation.dispatchers
+package ua.cn.stu.foundation.model.tasks.dispatchers
 
 interface Dispatcher {
     fun dispatch(block: () -> Unit)
