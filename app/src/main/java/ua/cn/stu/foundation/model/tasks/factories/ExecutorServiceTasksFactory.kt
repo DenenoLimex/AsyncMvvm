@@ -1,7 +1,9 @@
 package ua.cn.stu.foundation.model.tasks.factories
 
-import SynchronizedTask
-import ua.cn.stu.foundation.model.tasks.*
+import ua.cn.stu.foundation.model.tasks.AbstractTask
+import ua.cn.stu.foundation.model.tasks.SynchronizedTask
+import ua.cn.stu.foundation.model.tasks.Task
+import ua.cn.stu.foundation.model.tasks.TaskListener
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
@@ -35,4 +37,4 @@ class ExecutorServiceTasksFactory(
             future?.cancel(true)
         }
     }
-} 
+}

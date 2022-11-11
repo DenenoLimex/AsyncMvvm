@@ -14,6 +14,7 @@ import java.util.concurrent.Executors
  */
 class App : Application(), BaseApplication {
 
+    // instances of all created task factories
     private val singleThreadExecutorTasksFactory = ExecutorServiceTasksFactory(Executors.newSingleThreadExecutor())
     private val handlerThreadTasksFactory = HandlerThreadTasksFactory()
     private val cachedThreadPoolExecutorTasksFactory = ExecutorServiceTasksFactory(Executors.newCachedThreadPool())
@@ -25,10 +26,10 @@ class App : Application(), BaseApplication {
      * Place your singleton scope dependencies here
      */
     override val singletonScopeDependencies: List<Any> = listOf(
-        cachedThreadPoolExecutorTasksFactory,
-        dispatcher,
-        InMemoryColorsRepository(
-            cachedThreadPoolExecutorTasksFactory, threadUtils
-        )
+        cachedThreadPoolExecutorTasksFactory, // task factory to be used in view-models
+        dispatcher, // dispatcher to be used in view-models
+
+        InMemoryColorsRepository(cachedThreadPoolExecutorTasksFactory, threadUtils)
     )
+
 }

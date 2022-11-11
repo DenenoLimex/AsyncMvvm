@@ -2,8 +2,8 @@ package ua.cn.stu.simplemvvm.model.colors
 
 import android.graphics.Color
 import ua.cn.stu.foundation.model.tasks.Task
-import ua.cn.stu.foundation.model.tasks.TasksFactory
 import ua.cn.stu.foundation.model.tasks.ThreadUtils
+import ua.cn.stu.foundation.model.tasks.factories.TasksFactory
 
 /**
  * Simple in-memory implementation of [ColorsRepository]
@@ -12,39 +12,40 @@ class InMemoryColorsRepository(
     private val tasksFactory: TasksFactory,
     private val threadUtils: ThreadUtils
 ) : ColorsRepository {
-    private var currentColor = AVAILABLE_COLORS[0]
+
+    private var currentColor: NamedColor = AVAILABLE_COLORS[0]
+
     private val listeners = mutableSetOf<ColorListener>()
-
-    override fun getCurrentColor(): Task<NamedColor> = tasksFactory.async {
-        threadUtils.sleep(2000)
-        return@async currentColor
-    }
-
-    override fun setCurrentColor(namedColor: NamedColor): Task<Unit> = tasksFactory.async {
-        threadUtils.sleep(2000)
-        if (currentColor != namedColor) {
-            currentColor = namedColor
-            listeners.forEach { it(namedColor) }
-        }
-    }
-
-    override fun getAvailableColors(): Task<List<NamedColor>> = tasksFactory.async {
-        threadUtils.sleep(2000)
-        return@async AVAILABLE_COLORS
-    }
-
-    override fun getById(id: Long): Task<NamedColor> = tasksFactory.async {
-        threadUtils.sleep(2000)
-        return@async AVAILABLE_COLORS.first { it.id == id }
-    }
 
     override fun addListener(listener: ColorListener) {
         listeners += listener
-        listener(currentColor)
     }
 
     override fun removeListener(listener: ColorListener) {
         listeners -= listener
+    }
+
+    override fun getAvailableColors(): Task<List<NamedColor>> = tasksFactory.async {
+        threadUtils.sleep(1000)
+        return@async AVAILABLE_COLORS
+    }
+
+    override fun getById(id: Long): Task<NamedColor> = tasksFactory.async {
+        threadUtils.sleep(1000)
+        return@async AVAILABLE_COLORS.first { it.id == id }
+    }
+
+    override fun getCurrentColor(): Task<NamedColor> = tasksFactory.async {
+        threadUtils.sleep(1000)
+        return@async currentColor
+    }
+
+    override fun setCurrentColor(color: NamedColor): Task<Unit> = tasksFactory.async {
+        threadUtils.sleep(1000)
+        if (currentColor != color) {
+            currentColor = color
+            listeners.forEach { it(color) }
+        }
     }
 
     companion object {

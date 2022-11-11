@@ -4,6 +4,7 @@ import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.FinalResult
 import ua.cn.stu.foundation.model.SuccessResult
 import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
+import ua.cn.stu.foundation.model.tasks.factories.TaskBody
 import ua.cn.stu.foundation.utils.delegates.Await
 
 /**

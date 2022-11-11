@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.lifecycle.SavedStateHandle
 import androidx.recyclerview.widget.GridLayoutManager
-import ua.cn.stu.simplemvvm.R
-import ua.cn.stu.simplemvvm.databinding.FragmentChangeColorBinding
-import ua.cn.stu.foundation.views.HasScreenTitle
 import ua.cn.stu.foundation.views.BaseFragment
 import ua.cn.stu.foundation.views.BaseScreen
+import ua.cn.stu.foundation.views.HasScreenTitle
 import ua.cn.stu.foundation.views.screenViewModel
+import ua.cn.stu.simplemvvm.R
+import ua.cn.stu.simplemvvm.databinding.FragmentChangeColorBinding
 import ua.cn.stu.simplemvvm.views.onTryAgain
 import ua.cn.stu.simplemvvm.views.renderSimpleResult
 
@@ -56,6 +56,7 @@ class ChangeColorFragment : BaseFragment(), HasScreenTitle {
                 binding.saveProgressBar.visibility = if (viewState.showSaveProgressBar) View.VISIBLE else View.GONE
             }
         }
+
         viewModel.screenTitle.observe(viewLifecycleOwner) {
             // if screen title is changed -> need to notify activity about updates
             notifyScreenUpdates()

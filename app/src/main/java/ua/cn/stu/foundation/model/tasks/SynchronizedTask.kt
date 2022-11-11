@@ -1,6 +1,4 @@
-import ua.cn.stu.foundation.model.tasks.CancelledException
-import ua.cn.stu.foundation.model.tasks.Task
-import ua.cn.stu.foundation.model.tasks.TaskListener
+package ua.cn.stu.foundation.model.tasks
 
 import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
 import java.util.concurrent.atomic.AtomicBoolean
@@ -56,4 +54,4 @@ class SynchronizedTask<T>(
         }
     }
 
-} 
+}

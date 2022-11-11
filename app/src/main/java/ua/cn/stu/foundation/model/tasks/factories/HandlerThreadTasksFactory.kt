@@ -1,9 +1,11 @@
 package ua.cn.stu.foundation.model.tasks.factories
 
-import SynchronizedTask
 import android.os.Handler
 import android.os.HandlerThread
-import ua.cn.stu.foundation.model.tasks.*
+import ua.cn.stu.foundation.model.tasks.AbstractTask
+import ua.cn.stu.foundation.model.tasks.SynchronizedTask
+import ua.cn.stu.foundation.model.tasks.Task
+import ua.cn.stu.foundation.model.tasks.TaskListener
 
 /**
  * Factory that creates task which are launched only in 1 thread managed by internal [HandlerThread].

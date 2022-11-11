@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
@@ -7,39 +8,40 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/resultProgressBar"
-        style="?android:attr/progressBarStyle"
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <LinearLayout
-        android:id="@+id/resultErrorContainer"
+        android:id="@+id/errorContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center|center_horizontal"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center_horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/textViewError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Error! Please try again later"
-            android:textSize="16sp" />
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="@string/error_try_again_later"/>
 
         <Button
             android:id="@+id/tryAgainButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:text="Try again" />
+            android:layout_marginTop="6dp"
+            android:text="@string/try_again"/>
+
     </LinearLayout>
+
+
 </merge>
