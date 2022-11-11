@@ -1,8 +1,14 @@
 package ua.cn.stu.foundation.model.tasks
 
+import kotlinx.coroutines.suspendCancellableCoroutine
+import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.FinalResult
+import ua.cn.stu.foundation.model.SuccessResult
 import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
+import ua.cn.stu.foundation.model.tasks.dispatchers.ImmediateDispatcher
 import ua.cn.stu.foundation.model.tasks.dispatchers.MainThreadDispatcher
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 typealias TaskListener<T> = (FinalResult<T>) -> Unit
 
@@ -40,4 +46,14 @@ interface Task<T> {
      */
     fun cancel()
 
+
+    suspend fun suspend(): T = suspendCancellableCoroutine { continuation ->
+        enqueue(ImmediateDispatcher()) {
+            continuation.invokeOnCancellation { cancel() }
+            when(it) {
+                is SuccessResult -> continuation.resume(it.data)
+                is ErrorResult -> continuation.resumeWithException(it.exception)
+            }
+        }
+    }
 }

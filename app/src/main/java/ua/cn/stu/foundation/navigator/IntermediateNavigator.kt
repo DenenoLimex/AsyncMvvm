@@ -1,14 +1,17 @@
 package ua.cn.stu.foundation.navigator
 
+import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
 import ua.cn.stu.foundation.utils.ResourceActions
 import ua.cn.stu.foundation.views.BaseScreen
 
 /**
  * Mediator that holds nav actions in the queue if real navigator is not active.
  */
-class IntermediateNavigator : Navigator {
+class IntermediateNavigator(
+    private val dispatcher: Dispatcher
+) : Navigator {
 
-    private val targetNavigator = ResourceActions<Navigator>()
+    private val targetNavigator = ResourceActions<Navigator>(dispatcher)
 
     override fun launch(screen: BaseScreen) = targetNavigator {
         it.launch(screen)
