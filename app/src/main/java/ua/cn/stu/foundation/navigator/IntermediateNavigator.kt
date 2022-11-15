@@ -1,6 +1,6 @@
 package ua.cn.stu.foundation.navigator
 
-import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
+import ua.cn.stu.foundation.model.dispatchers.Dispatcher
 import ua.cn.stu.foundation.utils.ResourceActions
 import ua.cn.stu.foundation.views.BaseScreen
 

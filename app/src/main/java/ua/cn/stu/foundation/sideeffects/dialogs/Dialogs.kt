@@ -1,6 +1,5 @@
 package ua.cn.stu.foundation.sideeffects.dialogs
 
-import ua.cn.stu.foundation.model.tasks.Task
 import ua.cn.stu.foundation.sideeffects.dialogs.plugin.DialogConfig
 import ua.cn.stu.foundation.sideeffects.dialogs.plugin.DialogsPlugin
 

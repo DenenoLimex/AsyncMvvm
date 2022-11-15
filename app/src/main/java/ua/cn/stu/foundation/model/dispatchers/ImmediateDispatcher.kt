@@ -1,4 +1,4 @@
-package ua.cn.stu.foundation.model.tasks.dispatchers
+package ua.cn.stu.foundation.model.dispatchers
 
 class ImmediateDispatcher: Dispatcher {
     override fun dispatch(block: () -> Unit) {
