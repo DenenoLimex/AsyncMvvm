@@ -2,6 +2,8 @@ package ua.cn.stu.foundation.views
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.Result
 import ua.cn.stu.foundation.model.SuccessResult
@@ -62,5 +64,16 @@ open class BaseViewModel() : ViewModel() {
 
     private fun clearsViewModelScope() {
         viewModelScope.cancel()
+    }
+
+    fun <T> SavedStateHandle.getStateFlow(key: String, initialValue: T): MutableStateFlow<T> {
+        val savedStateHandle = this
+        val mutableStateFlow = MutableStateFlow(savedStateHandle[key] ?: initialValue)
+        viewModelScope.launch {
+            mutableStateFlow.collect {
+                savedStateHandle[key] = it
+            }
+        }
+        return mutableStateFlow
     }
 }

@@ -2,6 +2,7 @@ package ua.cn.stu.simplemvvm.views.changecolor
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ua.cn.stu.foundation.model.PendingResult
 import ua.cn.stu.foundation.model.SuccessResult
@@ -27,10 +28,9 @@ class ChangeColorViewModel(
 ) : BaseViewModel(), ColorsAdapter.Listener {
 
     // input sources
-    private val _availableColors = MutableLiveResult<List<NamedColor>>(PendingResult())
-    private val _currentColorId =
-        savedStateHandle.getLiveData("currentColorId", screen.currentColorId)
-    private val _saveInProgress = MutableLiveData(false)
+    private val _availableColors = MutableStateFlow<Result<List<NamedColor>>>(PendingResult())
+    private val _currentColorId = savedStateHandle.getLiveData("currentColorId", screen.currentColorId)
+    private val _saveInProgress = MutableStateFlow(false)
 
     // main destination (contains merged values from _availableColors & _currentColorId)
     private val _viewState = MediatorLiveResult<ViewState>()

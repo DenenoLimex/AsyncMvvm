@@ -3,6 +3,7 @@ package ua.cn.stu.simplemvvm.views.currentcolor
 import android.Manifest
 import android.util.Log
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import ua.cn.stu.foundation.model.PendingResult
 import ua.cn.stu.foundation.model.SuccessResult
 import ua.cn.stu.foundation.model.takeSuccess
@@ -36,50 +37,14 @@ class CurrentColorViewModel(
     private val _currentColor = MutableLiveResult<NamedColor>(PendingResult())
     val currentColor: LiveResult<NamedColor> = _currentColor
 
-    private val colorListener: ColorListener = {
-        _currentColor.postValue(SuccessResult(it))
-    }
-
-    // --- example of listening results via model layer
-
     init {
-        colorsRepository.addListener(colorListener)
-        load()
         viewModelScope.launch {
-            delay(1000)
-
-            val result = withContext(Dispatchers.Default) {
-                val part1 = async {
-                    delay(1000)
-                    Log.d("deneno", "Part 1 done")
-                    return@async "Part 1 done"
-                }
-                val part2 = async {
-                    delay(2000)
-                    Log.d("deneno", "Part 2 done")
-                    return@async "Part 2 done"
-                }
-                val part3 = async {
-                    delay(3000)
-                    Log.d("deneno", "Part 3 done")
-                    return@async "Part 3 done"
-                }
-                part3.cancel()
-                val result1 = part1.await()
-                val result2 = part2.await()
-                val result3 = part3.await()
-                return@withContext "$result1\n$result2\n$result3"
+            colorsRepository.listenCurrentColor().collect{
+                _currentColor.postValue(SuccessResult(it))
             }
-            Log.d("deneno", "Result: $result")
         }
+        load()
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        colorsRepository.removeListener(colorListener)
-    }
-
-    // --- example of listening results directly from the screen
 
     override fun onResult(result: Any) {
         super.onResult(result)
